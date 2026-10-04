@@ -1,0 +1,32 @@
+---
+import type { Locale } from "../../data/site";
+import { useTranslations, localizePath } from "../../i18n/utils";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div
+  data-sticky-bar
+  hidden
+  class="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface py-3 shadow-[0_-8px_24px_rgb(43_35_32_/_0.12)] lg:hidden"
+>
+  <div class="container-page flex items-center justify-between gap-3">
+    <div data-sticky-summary hidden class="min-w-0 text-sm">
+      <span data-sticky-count class="font-medium"></span>
+      <span class="mx-1 text-text-muted">·</span>
+      <span data-sticky-total class="font-semibold"></span>
+    </div>
+    <a
+      data-sticky-book
+      href={`${localizePath("/book", lang)}#booking`}
+      class="btn btn-primary ml-auto"
+    >
+      <span data-sticky-label>{t("sticky.book")}</span>
+    </a>
+  </div>
+</div>

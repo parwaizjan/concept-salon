@@ -1,0 +1,42 @@
+---
+import type { Locale } from "../../data/site";
+import type { ServiceCategory } from "../../lib/services";
+import { useTranslations } from "../../i18n/utils";
+
+interface Props {
+  categories: ServiceCategory[];
+  lang: Locale;
+}
+
+const { categories, lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<nav aria-label={t("services.filter")}>
+  <ul class="no-scrollbar flex gap-2 overflow-x-auto pb-1">
+    <li>
+      <button
+        type="button"
+        data-category-chip="all"
+        aria-pressed="true"
+        class="btn btn-primary whitespace-nowrap !min-h-10 !px-4 text-sm"
+      >
+        {t("services.all")}
+      </button>
+    </li>
+    {
+      categories.map((category) => (
+        <li>
+          <button
+            type="button"
+            data-category-chip={category.id}
+            aria-pressed="false"
+            class="btn btn-outline whitespace-nowrap !min-h-10 !px-4 text-sm"
+          >
+            {category.name}
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

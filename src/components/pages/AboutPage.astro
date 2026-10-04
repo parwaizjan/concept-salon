@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MediaImage from "../MediaImage.astro";
+import { getEntry, render } from "astro:content";
+import { type Locale } from "../../data/site";
+import { aboutImage } from "../../data/about-image";
+import { useTranslations } from "../../i18n/utils";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const entry =
+  (await getEntry("pages", `about/${lang}`)) ??
+  (await getEntry("pages", "about/en"));
+
+const rendered = entry ? await render(entry) : null;
+const Content = rendered?.Content;
+---
+
+<BaseLayout lang={lang} path="/about" title={entry?.data.title}>
+  <article class="container-page max-w-2xl py-12">
+    <h1 class="font-heading text-4xl">{entry?.data.title}</h1>
+    <div class="mt-4 space-y-4 leading-relaxed text-text-muted">
+      {Content && <Content />}
+    </div>
+
+    <MediaImage
+      image={aboutImage}
+      alt={t("about.imageAlt")}
+      widths={[480, 800, 1200]}
+      sizes="(min-width: 768px) 42rem, 100vw"
+      class="mt-8 aspect-[4/3] w-full rounded-lg border border-border object-cover"
+    />
+  </article>
+</BaseLayout>

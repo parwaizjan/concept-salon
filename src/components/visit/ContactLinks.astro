@@ -1,0 +1,71 @@
+---
+import { site, type Locale } from "../../data/site";
+import { buildWhatsAppUrl } from "../../lib/whatsapp";
+import type { UiKey } from "../../i18n/ui";
+import { useTranslations } from "../../i18n/utils";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const genericMessage = (key: UiKey) => buildWhatsAppUrl(t(key));
+const chatUrl = genericMessage("msg.intro");
+const socials = Object.entries(site.socials).filter(([, url]) => url);
+---
+
+<div>
+  <h3 class="font-heading text-lg">{t("visit.address")}</h3>
+  <address class="mt-2 not-italic text-text-muted">
+    {site.address[lang] ?? site.address.en}
+  </address>
+
+  <ul class="mt-4 space-y-2 text-sm">
+    {
+      site.phone && (
+        <li>
+          <span class="text-text-muted">{t("visit.phone")}: </span>
+          <a class="underline" href={`tel:${site.phone.replace(/\s+/g, "")}`}>
+            {site.phone}
+          </a>
+        </li>
+      )
+    }
+    <li>
+      <span class="text-text-muted">{t("visit.whatsapp")}: </span>
+      <a
+        class="underline"
+        href={chatUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {t("common.chatOnWhatsApp")}
+      </a>
+    </li>
+    {
+      site.email && (
+        <li>
+          <a class="underline" href={`mailto:${site.email}`}>
+            {site.email}
+          </a>
+        </li>
+      )
+    }
+  </ul>
+
+  {
+    socials.length > 0 && (
+      <ul class="mt-4 flex gap-3 text-sm">
+        {socials.map(([name, url]) => (
+          <li>
+            <a href={url} rel="noopener noreferrer" class="underline">
+              {name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</div>

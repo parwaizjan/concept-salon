@@ -1,0 +1,57 @@
+---
+import type { Locale } from "../../data/site";
+import type { Service } from "../../lib/services";
+import { formatPrice } from "../../lib/format";
+import { useTranslations, localizePath } from "../../i18n/utils";
+import MediaImage from "../MediaImage.astro";
+
+interface Props {
+  services: Service[];
+  lang: Locale;
+}
+
+const { services, lang } = Astro.props;
+const t = useTranslations(lang);
+const featured = services.filter((service) => service.featured);
+---
+
+{
+  featured.length > 0 && (
+    <section class="bg-surface-alt py-10">
+      <div class="container-page">
+        <div class="mb-4 flex items-end justify-between gap-4">
+          <h2 class="font-heading text-2xl">{t("featured.title")}</h2>
+          <a
+            href={localizePath("/services", lang)}
+            class="text-sm font-medium text-primary underline"
+          >
+            {t("common.viewServices")}
+          </a>
+        </div>
+        <ul class="no-scrollbar flex gap-4 overflow-x-auto pb-2">
+          {featured.map((service) => (
+            <li class="w-48 shrink-0">
+              <a
+                href={localizePath("/services", lang)}
+                class="card block overflow-hidden"
+              >
+                <MediaImage
+                  image={service.image}
+                  alt={service.name}
+                  sizes="12rem"
+                  class="aspect-[4/3] w-full object-cover"
+                />
+                <div class="p-3">
+                  <p class="truncate font-medium">{service.name}</p>
+                  <p class="text-sm text-text-muted">
+                    {t("common.from")} {formatPrice(service.price)}
+                  </p>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

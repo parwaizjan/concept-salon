@@ -1,0 +1,78 @@
+---
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/inter";
+import "@fontsource-variable/noto-sans-sinhala";
+import "@fontsource-variable/noto-sans-tamil";
+
+import { site, type Locale } from "../data/site";
+import { ui } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import StickyBookBar from "../components/book/StickyBookBar.astro";
+import Seo from "../components/Seo.astro";
+import "../styles/global.css";
+
+interface Props {
+  lang: Locale;
+  title?: string;
+  description?: string;
+  /** Logical (locale-less) path for canonical/hreflang, e.g. "/services". */
+  path: string;
+}
+
+const { lang, title, description, path } = Astro.props;
+const t = useTranslations(lang);
+
+const pageTitle = title ? `${title} · ${site.name}` : site.name;
+const pageDescription = description ?? site.tagline[lang] ?? site.tagline.en;
+
+const appointmentConfig = {
+  whatsappNumber: site.whatsappNumber,
+  siteName: site.name,
+  lang,
+  i18n: { ...ui.en, ...ui[lang] },
+  services: site.services,
+  appointment: {
+    slots: site.appointment.slots,
+    minLeadDays: site.appointment.minLeadDays,
+    maxLeadDays: site.appointment.maxLeadDays,
+  },
+};
+
+const isDefaultLocale = lang === site.defaultLocale;
+---
+
+<!doctype html>
+<html lang={lang} translate={isDefaultLocale ? undefined : "no"}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {!isDefaultLocale && <meta name="google" content="notranslate" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <Seo
+      title={pageTitle}
+      description={pageDescription}
+      lang={lang}
+      path={path}
+    />
+    <slot name="head" />
+    <script
+      type="application/json"
+      id="appointment-config"
+      set:html={JSON.stringify(appointmentConfig)}
+    />
+    <script>
+      import "../scripts/appointment";
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t("a11y.skip")}</a>
+    <Header lang={lang} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <StickyBookBar lang={lang} />
+  </body>
+</html>

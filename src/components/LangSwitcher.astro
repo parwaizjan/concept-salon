@@ -1,0 +1,49 @@
+---
+import { site, type Locale } from "../data/site";
+import { languages } from "../i18n/ui";
+import { switchLocalePath, useTranslations } from "../i18n/utils";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const current = Astro.url.pathname + Astro.url.search;
+
+// Compact labels so the switcher fits the header on small screens.
+const shortLabels: Record<Locale, string> = {
+  en: "EN",
+  si: "සිං",
+  ta: "தமிழ்",
+};
+---
+
+{
+  site.locales.length > 1 && (
+    <div
+      class="flex items-center gap-0.5"
+      role="group"
+      aria-label={t("common.language")}
+    >
+      {site.locales.map((code) => (
+        <a
+          href={switchLocalePath(current, code)}
+          hreflang={code}
+          lang={code}
+          title={languages[code]}
+          aria-label={languages[code]}
+          aria-current={code === lang ? "true" : undefined}
+          class:list={[
+            "rounded-full px-2 py-1 text-xs font-semibold",
+            code === lang
+              ? "bg-primary text-on-primary"
+              : "text-text-muted hover:text-text",
+          ]}
+        >
+          {shortLabels[code]}
+        </a>
+      ))}
+    </div>
+  )
+}

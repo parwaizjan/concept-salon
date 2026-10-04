@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import GalleryGrid from "../gallery/GalleryGrid.astro";
+import { getEntry, render } from "astro:content";
+import { type Locale } from "../../data/site";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const entry =
+  (await getEntry("pages", `gallery/${lang}`)) ??
+  (await getEntry("pages", "gallery/en"));
+
+const rendered = entry ? await render(entry) : null;
+const Content = rendered?.Content;
+---
+
+<BaseLayout lang={lang} path="/gallery" title={entry?.data.title}>
+  <section class="container-page py-12">
+    <h1 class="font-heading text-4xl">{entry?.data.title}</h1>
+    <div class="mt-3 max-w-2xl leading-relaxed text-text-muted">
+      {Content && <Content />}
+    </div>
+
+    <div class="mt-8">
+      <GalleryGrid lang={lang} />
+    </div>
+  </section>
+</BaseLayout>

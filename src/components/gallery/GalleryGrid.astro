@@ -1,0 +1,45 @@
+---
+import { Image } from "astro:assets";
+
+import type { Locale } from "../../data/site";
+import { gallery } from "../../data/gallery";
+import { useTranslations } from "../../i18n/utils";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const imageClass =
+  "aspect-square w-full rounded-md border border-border object-cover";
+---
+
+<div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+  {
+    gallery.map((image) =>
+      typeof image.src === "string" ? (
+        <img
+          src={image.src}
+          alt={t(image.altKey)}
+          width="600"
+          height="600"
+          loading="lazy"
+          decoding="async"
+          class={imageClass}
+        />
+      ) : (
+        <Image
+          src={image.src}
+          alt={t(image.altKey)}
+          widths={[300, 600]}
+          sizes="(min-width: 640px) 20rem, 45vw"
+          format="webp"
+          loading="lazy"
+          class={imageClass}
+        />
+      ),
+    )
+  }
+</div>

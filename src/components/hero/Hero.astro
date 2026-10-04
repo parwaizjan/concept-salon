@@ -1,0 +1,110 @@
+---
+import { site, type Locale } from "../../data/site";
+import { useTranslations, localizePath } from "../../i18n/utils";
+import { buildWhatsAppUrl } from "../../lib/whatsapp";
+import HeroImage from "./HeroImage.astro";
+import HeroMedia from "./HeroMedia.astro";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const variant = site.heroVariant;
+const tagline = site.tagline[lang] ?? site.tagline.en;
+const bookHref = localizePath("/book", lang);
+const chatUrl = buildWhatsAppUrl(`${t("msg.intro")} ${t("msg.footer")}`);
+---
+
+{
+  variant === "overlay" && (
+    <section class="relative isolate overflow-hidden">
+      <HeroMedia class="absolute inset-0 -z-10" />
+      <div class="absolute inset-0 -z-10 bg-black/40 sm:bg-linear-to-r sm:from-black/70 sm:via-black/25 sm:to-transparent" />
+      <div class="container-page flex min-h-[134vw] flex-col justify-center py-20 text-white sm:min-h-[68vh]">
+        <span class="badge w-fit bg-white/20 text-white">
+          {t("hero.eyebrow")}
+        </span>
+        <h1 class="mt-3 max-w-xl font-heading text-4xl text-shadow-sm text-shadow-black/30 sm:text-6xl">
+          {site.name}
+        </h1>
+        <p class="mt-3 max-w-lg text-lg text-white/90 text-shadow-sm text-shadow-black/40">
+          {tagline}
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href={bookHref} class="btn btn-primary">
+            {t("hero.cta")}
+          </a>
+          <a
+            href={chatUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn bg-white text-text"
+            data-wa
+          >
+            {t("hero.secondary")}
+          </a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+{
+  variant === "classic" && (
+    <section class="relative isolate overflow-hidden">
+      <HeroMedia class="absolute inset-0 -z-10" />
+      <div class="absolute inset-0 -z-10 bg-black/45" />
+      <div class="container-page flex min-h-[134vw] flex-col items-center justify-center py-20 text-center text-white sm:min-h-[60vh]">
+        <span class="badge bg-white/20 text-white">{t("hero.eyebrow")}</span>
+        <h1 class="mt-3 font-heading text-4xl sm:text-6xl">{site.name}</h1>
+        <p class="mt-3 max-w-xl text-lg text-white/90">{tagline}</p>
+        <div class="mt-6 flex flex-wrap justify-center gap-3">
+          <a href={bookHref} class="btn btn-primary">
+            {t("hero.cta")}
+          </a>
+          <a
+            href={chatUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn bg-white text-text"
+            data-wa
+          >
+            {t("hero.secondary")}
+          </a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+{
+  variant === "split" && (
+    <section class="container-page grid items-center gap-8 py-14 md:grid-cols-2">
+      <div>
+        <span class="eyebrow">{t("hero.eyebrow")}</span>
+        <h1 class="mt-3 font-heading text-4xl sm:text-5xl">{site.name}</h1>
+        <p class="mt-3 max-w-xl text-lg text-text-muted">{tagline}</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href={bookHref} class="btn btn-primary">
+            {t("hero.cta")}
+          </a>
+          <a
+            href={chatUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-outline"
+            data-wa
+          >
+            {t("hero.secondary")}
+          </a>
+        </div>
+      </div>
+      <HeroImage
+        class="w-full rounded-lg border border-border object-cover"
+        sizes="(min-width: 768px) 50vw, 100vw"
+      />
+    </section>
+  )
+}

@@ -1,0 +1,2 @@
+# Drop service photos here, named after the service id (e.g. gel-manicure.jpg).
+# They are auto-loaded by src/data/service-images.ts. See docs/CONTENT-AND-SERVICES.md.

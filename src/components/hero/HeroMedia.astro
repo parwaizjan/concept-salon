@@ -1,0 +1,16 @@
+---
+import { site } from "../../data/site";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div
+  class:list={["hero-media", className]}
+  style={`--hero-wide:url(${site.heroImage});--hero-mobile:url(${site.heroImageMobile})`}
+  aria-hidden="true"
+>
+</div>

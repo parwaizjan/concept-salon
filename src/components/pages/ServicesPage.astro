@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ServiceList from "../services/ServiceList.astro";
+import { type Locale } from "../../data/site";
+import { getCategories, getServices } from "../../lib/services";
+import { useTranslations } from "../../i18n/utils";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const [services, categories] = await Promise.all([
+  getServices(lang),
+  getCategories(lang),
+]);
+---
+
+<BaseLayout lang={lang} path="/services" title={t("services.title")}>
+  <ServiceList
+    categories={categories}
+    services={services}
+    lang={lang}
+    heading="h1"
+  />
+</BaseLayout>

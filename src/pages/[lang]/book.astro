@@ -1,0 +1,14 @@
+---
+import BookPage from "../../components/pages/BookPage.astro";
+import { site, type Locale } from "../../data/site";
+
+export function getStaticPaths() {
+  return site.locales
+    .filter((locale) => locale !== site.defaultLocale)
+    .map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Locale;
+---
+
+<BookPage lang={lang} />

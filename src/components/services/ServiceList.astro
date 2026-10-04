@@ -1,0 +1,122 @@
+---
+import type { Locale } from "../../data/site";
+import type { Service, ServiceCategory } from "../../lib/services";
+import { formatPrice } from "../../lib/format";
+import { useTranslations } from "../../i18n/utils";
+import MediaImage from "../MediaImage.astro";
+import CategoryNav from "./CategoryNav.astro";
+
+interface Props {
+  categories: ServiceCategory[];
+  services: Service[];
+  lang: Locale;
+  /** Heading level for the section title (page uses h1, homepage h2). */
+  heading?: "h1" | "h2";
+}
+
+const { categories, services, lang, heading = "h2" } = Astro.props;
+const t = useTranslations(lang);
+const Heading = heading;
+---
+
+<section id="services" class="container-page py-10">
+  <header class="mb-4">
+    <Heading class="font-heading text-3xl">{t("services.title")}</Heading>
+    <p class="mt-1 text-text-muted">{t("services.subtitle")}</p>
+  </header>
+
+  <CategoryNav categories={categories} lang={lang} />
+
+  {
+    services.length === 0 ? (
+      <p class="mt-8 text-text-muted">{t("services.empty")}</p>
+    ) : (
+      <div class="mt-8 space-y-10">
+        {categories.map((category) => {
+          const group = services.filter(
+            (service) => service.category === category.id,
+          );
+          if (group.length === 0) return null;
+          return (
+            <div data-category-section={category.id}>
+              <div class="flex items-center gap-3">
+                {category.image && (
+                  <MediaImage
+                    image={category.image}
+                    alt=""
+                    widths={[96, 192]}
+                    sizes="4rem"
+                    class="h-14 w-14 shrink-0 rounded-full border border-border object-cover sm:h-16 sm:w-16"
+                  />
+                )}
+                <h3 class="font-heading text-2xl">{category.name}</h3>
+              </div>
+
+              <ul class="mt-4 divide-y divide-border overflow-hidden rounded-md border border-border bg-surface">
+                {group.map((service) => (
+                  <li
+                    data-service
+                    data-id={service.id}
+                    data-name={service.name}
+                    data-price={service.price}
+                    data-duration={service.duration ?? ""}
+                    data-available={String(service.available)}
+                    data-category={service.category}
+                    class:list={[
+                      "flex flex-col gap-3 p-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-4",
+                      !service.available && "opacity-60",
+                    ]}
+                  >
+                    <div class="min-w-0">
+                      <p class="font-medium">{service.name}</p>
+                      {(service.description || service.duration) && (
+                        <p class="mt-0.5 text-sm text-text-muted">
+                          {service.description}
+                          {service.duration && (
+                            <span>
+                              {service.description ? " · " : ""}
+                              {service.duration} {t("common.min")}
+                            </span>
+                          )}
+                        </p>
+                      )}
+                      {service.note && (
+                        <p class="mt-0.5 text-xs font-medium text-accent">
+                          {service.note}
+                        </p>
+                      )}
+                      <p
+                        data-unavailable
+                        hidden={service.available}
+                        class="mt-0.5 text-xs font-semibold text-danger"
+                      >
+                        {t("services.unavailable")}
+                      </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-3 sm:shrink-0 sm:justify-end">
+                      <span data-price-display class="font-semibold">
+                        {formatPrice(service.price)}
+                      </span>
+                      <button
+                        type="button"
+                        class="btn btn-primary !min-h-10 !px-4 text-sm"
+                        data-service-toggle
+                        data-label-add={t("services.add")}
+                        data-label-added={t("services.added")}
+                        disabled={!service.available}
+                        aria-pressed="false"
+                      >
+                        {t("services.add")}
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </div>
+    )
+  }
+</section>

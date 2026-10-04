@@ -1,0 +1,81 @@
+---
+import { site, type Locale } from "../data/site";
+import { localizePath } from "../i18n/utils";
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Locale;
+  /** Logical (locale-less) path, e.g. "/services" or "/". */
+  path: string;
+}
+
+const { title, description, lang, path } = Astro.props;
+const hrefFor = (locale: Locale) =>
+  new URL(localizePath(path, locale), site.siteUrl).href;
+const canonical = hrefFor(lang);
+const ogImage = new URL(site.ogImage, site.siteUrl).href;
+
+const dayNames = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const jsonLd =
+  path === "/"
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BeautySalon",
+        name: site.name,
+        description,
+        url: site.siteUrl,
+        image: ogImage,
+        telephone: site.phone,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: site.address.en,
+          addressCountry: "LK",
+        },
+        openingHoursSpecification: site.hours
+          .filter((hour) => hour.open)
+          .map((hour) => ({
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: `https://schema.org/${dayNames[hour.day]}`,
+            opens: hour.open,
+            closes: hour.close,
+          })),
+      }
+    : null;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+{!site.indexable && <meta name="robots" content="noindex, nofollow" />}
+
+{
+  site.locales.map((locale) => (
+    <link rel="alternate" hreflang={locale} href={hrefFor(locale)} />
+  ))
+}
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={lang} />
+<meta property="og:image" content={ogImage} />
+<meta name="twitter:card" content="summary_large_image" />
+
+{
+  jsonLd && (
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  )
+}

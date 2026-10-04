@@ -1,0 +1,85 @@
+---
+import type { Locale } from "../../data/site";
+import type { Service, ServiceCategory } from "../../lib/services";
+import { formatPrice } from "../../lib/format";
+import { useTranslations } from "../../i18n/utils";
+
+interface Props {
+  categories: ServiceCategory[];
+  services: Service[];
+  lang: Locale;
+}
+
+const { categories, services, lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="space-y-6">
+  {
+    categories.map((category) => {
+      const group = services.filter(
+        (service) => service.category === category.id,
+      );
+      if (group.length === 0) return null;
+      return (
+        <fieldset>
+          <legend class="font-heading text-xl">{category.name}</legend>
+          <ul class="mt-2 divide-y divide-border overflow-hidden rounded-md border border-border bg-surface">
+            {group.map((service) => (
+              <li
+                data-service
+                data-id={service.id}
+                data-name={service.name}
+                data-price={service.price}
+                data-duration={service.duration ?? ""}
+                data-available={String(service.available)}
+                data-category={service.category}
+                class:list={[
+                  "flex items-start gap-3 p-3",
+                  !service.available && "opacity-60",
+                ]}
+              >
+                <input
+                  type="checkbox"
+                  id={`estimator-${service.id}`}
+                  data-service-check
+                  disabled={!service.available}
+                  class="mt-1 h-5 w-5 shrink-0 accent-[var(--c-primary)]"
+                />
+                <label
+                  for={`estimator-${service.id}`}
+                  class:list={[
+                    "min-w-0 flex-1",
+                    service.available && "cursor-pointer",
+                  ]}
+                >
+                  <span class="flex items-baseline justify-between gap-3">
+                    <span class="font-medium">{service.name}</span>
+                    <span class="shrink-0 font-semibold" data-price-display>
+                      {formatPrice(service.price)}
+                    </span>
+                  </span>
+                  <span class="mt-0.5 block text-sm text-text-muted">
+                    {service.description}
+                    {service.duration && (
+                      <span>
+                        {" "}
+                        · {service.duration} {t("common.min")}
+                      </span>
+                    )}
+                    {!service.available && (
+                      <span class="text-danger">
+                        {" "}
+                        · {t("services.unavailable")}
+                      </span>
+                    )}
+                  </span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </fieldset>
+      );
+    })
+  }
+</div>

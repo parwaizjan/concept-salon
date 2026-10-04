@@ -1,0 +1,22 @@
+---
+import { site } from "../../data/site";
+
+interface Props {
+  class?: string;
+  sizes?: string;
+}
+
+const { class: className = "", sizes = "100vw" } = Astro.props;
+---
+
+<img
+  src={site.heroImage}
+  srcset={site.heroImageSrcSet}
+  sizes={sizes}
+  alt=""
+  width="1680"
+  height="944"
+  loading="lazy"
+  decoding="async"
+  class={className}
+/>

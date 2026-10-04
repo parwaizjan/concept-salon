@@ -1,0 +1,88 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Estimator from "../book/Estimator.astro";
+import DateTimePicker from "../book/DateTimePicker.astro";
+import { type Locale } from "../../data/site";
+import { getCategories, getServices } from "../../lib/services";
+import { buildWhatsAppUrl } from "../../lib/whatsapp";
+import { useTranslations } from "../../i18n/utils";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const [services, categories] = await Promise.all([
+  getServices(lang),
+  getCategories(lang),
+]);
+
+const fallbackUrl = buildWhatsAppUrl(`${t("msg.intro")} ${t("msg.footer")}`);
+---
+
+<BaseLayout lang={lang} path="/book" title={t("booking.title")}>
+  <section class="container-page py-10">
+    <h1 class="font-heading text-3xl">{t("booking.title")}</h1>
+    <p class="mt-1 max-w-2xl text-text-muted">{t("booking.subtitle")}</p>
+
+    <form
+      data-appointment-form
+      id="booking"
+      class="mt-8 grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-start"
+    >
+      <div>
+        <h2 class="mb-3 font-heading text-lg">{t("booking.stepServices")}</h2>
+        <Estimator categories={categories} services={services} lang={lang} />
+      </div>
+
+      <aside class="lg:sticky lg:top-28">
+        <div class="card p-4">
+          <h2 class="font-heading text-lg">{t("booking.selected")}</h2>
+          <ul data-estimator-list class="mt-2 divide-y divide-border"></ul>
+          <p data-estimator-empty class="mt-2 text-sm text-text-muted">
+            {t("booking.empty")}
+          </p>
+          <div
+            data-estimator-totals
+            hidden
+            class="mt-3 flex items-center justify-between border-t border-border pt-3"
+          >
+            <span class="text-sm text-text-muted">{t("booking.total")}</span>
+            <strong data-estimator-total class="text-lg"></strong>
+          </div>
+          <p class="mt-2 text-xs text-text-muted">{t("booking.indicative")}</p>
+        </div>
+
+        <div class="mt-4">
+          <DateTimePicker lang={lang} />
+        </div>
+
+        <button
+          type="submit"
+          data-appointment-send
+          disabled
+          class="btn btn-primary mt-4 w-full"
+        >
+          {t("booking.send")}
+        </button>
+        <p data-appointment-warning hidden class="mt-2 text-sm text-danger">
+          {t("booking.selectFirst")}
+        </p>
+        <p class="mt-2 text-xs text-text-muted">{t("booking.noPayment")}</p>
+
+        <noscript>
+          <a
+            href={fallbackUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-outline mt-3 w-full"
+            data-wa
+          >
+            {t("common.chatOnWhatsApp")}
+          </a>
+        </noscript>
+      </aside>
+    </form>
+  </section>
+</BaseLayout>

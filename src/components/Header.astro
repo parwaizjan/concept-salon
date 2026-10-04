@@ -1,0 +1,84 @@
+---
+import { site, type Locale } from "../data/site";
+import { isLocale, useTranslations, localizePath } from "../i18n/utils";
+import LangSwitcher from "./LangSwitcher.astro";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const links = [
+  { key: "nav.home", href: "/" },
+  { key: "nav.services", href: "/services" },
+  { key: "nav.gallery", href: "/gallery" },
+  { key: "nav.about", href: "/about" },
+  { key: "nav.visit", href: "/visit" },
+] as const;
+
+// The locale-less path for the current page, so nav items can be marked active.
+const pathParts = Astro.url.pathname.split("/").filter(Boolean);
+if (isLocale(pathParts[0])) pathParts.shift();
+const logicalPath = `/${pathParts.join("/")}`.replace(/\/+$/, "") || "/";
+
+const isActive = (href: string) => {
+  const target = href === "/" ? "/" : href.replace(/\/+$/, "");
+  return (
+    logicalPath === target ||
+    (target !== "/" && logicalPath.startsWith(`${target}/`))
+  );
+};
+---
+
+<header class="sticky top-0 z-40 border-b border-border bg-bg/90 backdrop-blur">
+  <div class="container-page flex items-center justify-between gap-3 pt-2">
+    <a
+      href={localizePath("/", lang)}
+      class="flex items-center gap-2"
+      aria-label={site.name}
+    >
+      <img src={site.logo} alt="" width="36" height="36" />
+      <span
+        class="whitespace-nowrap font-heading text-lg font-semibold sm:text-xl"
+        >{site.name}</span
+      >
+    </a>
+    <div class="flex items-center gap-2">
+      <LangSwitcher lang={lang} />
+      <a
+        href={localizePath("/book", lang)}
+        class="btn btn-primary !min-h-10 !px-4 text-sm"
+      >
+        {t("common.bookNow")}
+      </a>
+    </div>
+  </div>
+
+  <nav class="container-page" aria-label={t("nav.services")}>
+    <ul class="no-scrollbar flex gap-1 overflow-x-auto py-1.5">
+      {
+        links.map((link) => {
+          const active = isActive(link.href);
+          return (
+            <li>
+              <a
+                href={localizePath(link.href, lang)}
+                aria-current={active ? "page" : undefined}
+                class:list={[
+                  "inline-flex min-h-9 items-center whitespace-nowrap rounded-full px-2 text-sm font-medium sm:px-3",
+                  active
+                    ? "bg-surface-alt text-primary"
+                    : "text-text-muted hover:bg-surface-alt hover:text-text",
+                ]}
+              >
+                {t(link.key)}
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </nav>
+</header>

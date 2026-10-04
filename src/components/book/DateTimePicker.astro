@@ -1,0 +1,113 @@
+---
+import { site, type Locale } from "../../data/site";
+import { useTranslations } from "../../i18n/utils";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const toIso = (date: Date) =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(
+    date.getDate(),
+  ).padStart(2, "0")}`;
+
+const start = new Date();
+start.setDate(start.getDate() + site.appointment.minLeadDays);
+const end = new Date();
+end.setDate(end.getDate() + site.appointment.maxLeadDays);
+
+const minDate = toIso(start);
+const maxDate = toIso(end);
+const slots = site.appointment.slots;
+
+const chipClass =
+  "inline-flex min-h-10 cursor-pointer items-center rounded-full border border-border px-3 text-sm peer-checked:border-primary peer-checked:bg-primary peer-checked:text-on-primary peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus";
+---
+
+<div class="card p-4">
+  <h2 class="font-heading text-lg">{t("booking.stepDetails")}</h2>
+
+  <div class="mt-3 space-y-4">
+    <div>
+      <label for="apt-date" class="block text-sm font-medium">
+        {t("booking.date")}
+      </label>
+      <input
+        id="apt-date"
+        name="date"
+        type="date"
+        min={minDate}
+        max={maxDate}
+        data-date
+        class="input mt-1"
+      />
+      <p class="mt-1 text-xs text-text-muted">{t("booking.dateHint")}</p>
+    </div>
+
+    <fieldset>
+      <legend class="text-sm font-medium">{t("booking.time")}</legend>
+      <div class="mt-2 flex flex-wrap gap-2">
+        {
+          slots.map((slot) => (
+            <label class="relative">
+              <input
+                type="checkbox"
+                name="slot"
+                value={slot}
+                data-slot
+                class="peer sr-only"
+              />
+              <span class={chipClass}>{slot}</span>
+            </label>
+          ))
+        }
+        <label class="relative">
+          <input
+            type="checkbox"
+            name="slot"
+            value="any"
+            data-slot-any
+            class="peer sr-only"
+          />
+          <span class={chipClass}>{t("booking.timeAny")}</span>
+        </label>
+      </div>
+      <p class="mt-1 text-xs text-text-muted">{t("booking.timeHint")}</p>
+    </fieldset>
+
+    <div>
+      <label for="apt-name" class="block text-sm font-medium">
+        {t("booking.name")}
+        <span class="font-normal text-text-muted">({t("common.optional")})</span
+        >
+      </label>
+      <input
+        id="apt-name"
+        name="name"
+        type="text"
+        data-name
+        class="input mt-1"
+        placeholder={t("booking.namePlaceholder")}
+        autocomplete="name"
+      />
+    </div>
+
+    <div>
+      <label for="apt-notes" class="block text-sm font-medium">
+        {t("booking.notes")}
+        <span class="font-normal text-text-muted">({t("common.optional")})</span
+        >
+      </label>
+      <textarea
+        id="apt-notes"
+        name="notes"
+        rows="3"
+        data-notes
+        class="input mt-1"
+        placeholder={t("booking.notesPlaceholder")}></textarea>
+    </div>
+  </div>
+</div>

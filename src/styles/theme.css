@@ -1,0 +1,105 @@
+/*
+ * Design tokens.
+ *
+ * `@theme inline` maps Tailwind utilities onto the runtime CSS variables below, so
+ * a clone rebrands by editing the variable values (and preset overrides) only.
+ * See docs/DESIGN-BRIEF.md.
+ */
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-alt: var(--c-surface-alt);
+  --color-text: var(--c-text);
+  --color-text-muted: var(--c-text-muted);
+  --color-primary: var(--c-primary);
+  --color-primary-strong: var(--c-primary-strong);
+  --color-on-primary: var(--c-on-primary);
+  --color-accent: var(--c-accent);
+  --color-border: var(--c-border);
+  --color-success: var(--c-success);
+  --color-danger: var(--c-danger);
+  --color-focus: var(--c-focus);
+
+  --font-heading: var(--font-heading-family);
+  --font-body: var(--font-body-family);
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+
+  --shadow-soft:
+    0 1px 2px rgb(43 35 32 / 0.06), 0 8px 24px rgb(43 35 32 / 0.08);
+}
+
+/* Default preset: Warm Rose (modern elegant, warm neutral + rose). */
+:root {
+  --c-bg: #faf6f2;
+  --c-surface: #ffffff;
+  --c-surface-alt: #f4ebe4;
+  --c-text: #2b2320;
+  --c-text-muted: #7a6a63;
+  --c-primary: #b76e79;
+  --c-primary-strong: #9c5561;
+  --c-on-primary: #ffffff;
+  --c-accent: #7c8c6a;
+  --c-border: #e7dad2;
+  --c-success: #3f7d4e;
+  --c-danger: #b23a3a;
+  --c-focus: #1d4ed8;
+
+  --font-heading-family:
+    "Fraunces", "Noto Serif Sinhala", "Noto Serif Tamil", Georgia, serif;
+  --font-body-family:
+    "Inter", "Noto Sans Sinhala", "Noto Sans Tamil", system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+}
+
+/* Alternate presets (pitch variety). Apply with <html data-theme="...">. */
+[data-theme="sage"] {
+  --c-bg: #f6f7f2;
+  --c-surface: #ffffff;
+  --c-surface-alt: #e9ede1;
+  --c-text: #262b22;
+  --c-text-muted: #69705f;
+  --c-primary: #6f8a63;
+  --c-primary-strong: #57724c;
+  --c-on-primary: #ffffff;
+  --c-accent: #b8766f;
+  --c-border: #dbe1d2;
+  --c-success: #3f7d4e;
+  --c-danger: #b23a3a;
+  --c-focus: #1d4ed8;
+}
+
+[data-theme="midnight"] {
+  --c-bg: #1a1518;
+  --c-surface: #241d21;
+  --c-surface-alt: #2f262b;
+  --c-text: #f6eef1;
+  --c-text-muted: #c7b3ba;
+  --c-primary: #d99aa5;
+  --c-primary-strong: #e9b4bd;
+  --c-on-primary: #1a1518;
+  --c-accent: #a9be8f;
+  --c-border: #453840;
+  --c-success: #7fbf8e;
+  --c-danger: #e08a8a;
+  --c-focus: #8ab4ff;
+}
+
+[data-theme="citrus"] {
+  --c-bg: #fdfaf3;
+  --c-surface: #ffffff;
+  --c-surface-alt: #f6edda;
+  --c-text: #33291b;
+  --c-text-muted: #7c6b4f;
+  --c-primary: #c98a3c;
+  --c-primary-strong: #a86f2a;
+  --c-on-primary: #ffffff;
+  --c-accent: #7c8c4a;
+  --c-border: #ece0c8;
+  --c-success: #3f7d4e;
+  --c-danger: #b23a3a;
+  --c-focus: #1d4ed8;
+}

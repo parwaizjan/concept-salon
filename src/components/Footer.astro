@@ -1,0 +1,64 @@
+---
+import { site, type Locale } from "../data/site";
+import { useTranslations, localizePath } from "../i18n/utils";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+
+const socials = Object.entries(site.socials).filter(([, url]) => url);
+---
+
+<footer class="mt-16 border-t border-border bg-surface-alt">
+  <div class="container-page grid gap-8 py-10 sm:grid-cols-3">
+    <div>
+      <div class="flex items-center gap-2">
+        <img src={site.logo} alt="" width="32" height="32" />
+        <span class="font-heading text-lg font-semibold">{site.name}</span>
+      </div>
+      <p class="mt-2 max-w-xs text-sm text-text-muted">
+        {site.tagline[lang] ?? site.tagline.en}
+      </p>
+    </div>
+
+    <nav aria-label="Footer">
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a href={localizePath("/services", lang)}>{t("nav.services")}</a>
+        </li>
+        <li><a href={localizePath("/book", lang)}>{t("nav.book")}</a></li>
+        <li><a href={localizePath("/gallery", lang)}>{t("nav.gallery")}</a></li>
+        <li><a href={localizePath("/about", lang)}>{t("nav.about")}</a></li>
+        <li><a href={localizePath("/visit", lang)}>{t("nav.visit")}</a></li>
+      </ul>
+    </nav>
+
+    <div class="space-y-2 text-sm text-text-muted">
+      <p>{t("footer.bookNote")}</p>
+      {
+        socials.length > 0 && (
+          <ul class="flex gap-3">
+            {socials.map(([name, url]) => (
+              <li>
+                <a href={url} rel="noopener noreferrer" class="underline">
+                  {name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="border-t border-border py-4">
+    <p class="container-page text-xs text-text-muted">
+      © {year}
+      {site.name}. {t("footer.rights")}
+    </p>
+  </div>
+</footer>

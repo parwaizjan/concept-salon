@@ -1,0 +1,195 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--c-bg);
+    color: var(--c-text);
+    font-family: var(--font-body-family);
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading-family);
+    line-height: 1.15;
+    font-weight: 600;
+  }
+
+  a {
+    color: inherit;
+    text-underline-offset: 0.2em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--c-focus);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 72rem;
+    padding-inline: 1rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    line-height: 1;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background-color: var(--c-primary);
+    color: var(--c-on-primary);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--c-primary-strong);
+  }
+
+  .btn-outline {
+    border: 1px solid var(--c-border);
+    background-color: transparent;
+    color: var(--c-text);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--c-primary);
+    color: var(--c-primary);
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .card {
+    background-color: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-accent);
+  }
+
+  /* Hide the native scrollbar on horizontal chip/carousel rows while keeping
+     momentum scrolling and keyboard access. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .input {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+    background-color: var(--c-surface);
+    color: var(--c-text);
+    font-size: 1rem;
+    font-family: inherit;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 0.5rem;
+    top: -3rem;
+    z-index: 100;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background-color: var(--c-primary);
+    color: var(--c-on-primary);
+    transition: top 0.15s ease;
+  }
+
+  .skip-link:focus {
+    top: 0.5rem;
+  }
+
+  /* Full-bleed decorative hero background. Portrait image below `sm`, wide above.
+     The URLs are supplied as CSS variables by HeroMedia.astro so they stay in
+     site.ts. A background is used (not <picture>) so exactly one image downloads
+     per breakpoint and there is no art-direction aspect-ratio mismatch. */
+  .hero-media {
+    background-image: var(--hero-mobile);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  @media (min-width: 640px) {
+    .hero-media {
+      background-image: var(--hero-wide);
+    }
+  }
+}
+
+/* Reserve space for the mobile-only sticky booking bar only while it is visible
+   (it appears once services are selected, and never on the /book form page). */
+@media (max-width: 1023.98px) {
+  body:has([data-sticky-bar]:not([hidden])) footer {
+    padding-bottom: 5.5rem;
+  }
+}

@@ -1,0 +1,46 @@
+---
+import { site, type Locale } from "../../data/site";
+import { useTranslations } from "../../i18n/utils";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// 2024-01-07 is a Sunday; index 0 = Sunday … 6 = Saturday.
+const dayNames = [0, 1, 2, 3, 4, 5, 6].map((day) =>
+  new Intl.DateTimeFormat(lang, { weekday: "long" }).format(
+    new Date(2024, 0, 7 + day),
+  ),
+);
+---
+
+<div>
+  <div class="flex items-center gap-2">
+    <h3 class="font-heading text-lg">{t("visit.hours")}</h3>
+    <span data-open-badge hidden class="badge bg-surface text-text-muted"
+    ></span>
+  </div>
+
+  <ul class="mt-2 space-y-1 text-sm">
+    {
+      site.hours.map((entry) => (
+        <li
+          class="flex justify-between gap-4"
+          data-hours-day={entry.day}
+          data-hours-open={entry.open}
+          data-hours-close={entry.close}
+        >
+          <span>{dayNames[entry.day]}</span>
+          <span class="text-text-muted">
+            {entry.open
+              ? `${entry.open} – ${entry.close}`
+              : t("visit.closedNow")}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+</div>
