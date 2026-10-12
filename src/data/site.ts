@@ -102,6 +102,18 @@ export const site = {
     refreshMinutes: 5,
   },
 
+  // Demo standard (see src/lib/demo.ts).
+  //  - The ribbon marks the site as a sample and links a website enquiry to Zuvo.
+  //  - `tag` is prefixed to every visitor-facing demo request so demo enquiries
+  //    are distinguishable from website enquiries. Both are dropped automatically
+  //    when a clone sets `indexable: true`.
+  demo: {
+    ribbonText: "Sample website — a demo by Zuvo Web Studio Express",
+    ribbonCta: "Message us",
+    tag: "[DEMO: Salon]",
+    enquiryNumber: "94743430033", // Zuvo Web Studio Express
+  },
+
   // SEO — false for the concept demo, true for a real salon clone.
   indexable: false,
   siteUrl: "https://demo-salon.zuvo.lk",

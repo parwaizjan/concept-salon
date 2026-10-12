@@ -49,9 +49,13 @@ It must be quick and mechanical. If a step is unclear or missing, fix this doc.
 
 ### Turning on indexing (do not miss this)
 
+Setting `indexable: true` (step 1) also removes the demo standard automatically:
+the sample ribbon and the `[DEMO: Salon]` source tag are gated on `indexable`
+(`src/lib/demo.ts`), so a live salon clone shows neither. No extra step needed.
+
 The concept ships invisible to search engines on purpose. A **live salon must be
-findable**, so all three of these have to change together or the site will stay out
-of Google even when it looks live:
+findable**, so all three of these have to change together or the site will stay
+out of Google even when it looks live:
 
 1. **`src/data/site.ts` → `indexable: true`.** This enables the sitemap and makes
    `src/pages/robots.txt.ts` emit an allow-all `robots.txt`.

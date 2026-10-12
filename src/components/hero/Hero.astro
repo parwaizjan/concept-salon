@@ -1,6 +1,7 @@
 ---
 import { site, type Locale } from "../../data/site";
 import { useTranslations, localizePath } from "../../i18n/utils";
+import { buildEnquiryMessage } from "../../lib/appointment";
 import { buildWhatsAppUrl } from "../../lib/whatsapp";
 import HeroImage from "./HeroImage.astro";
 import HeroMedia from "./HeroMedia.astro";
@@ -14,7 +15,7 @@ const t = useTranslations(lang);
 const variant = site.heroVariant;
 const tagline = site.tagline[lang] ?? site.tagline.en;
 const bookHref = localizePath("/book", lang);
-const chatUrl = buildWhatsAppUrl(`${t("msg.intro")} ${t("msg.footer")}`);
+const chatUrl = buildWhatsAppUrl(buildEnquiryMessage(t));
 ---
 
 {

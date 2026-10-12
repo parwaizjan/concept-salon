@@ -4,6 +4,7 @@ import Estimator from "../book/Estimator.astro";
 import DateTimePicker from "../book/DateTimePicker.astro";
 import { type Locale } from "../../data/site";
 import { getCategories, getServices } from "../../lib/services";
+import { buildEnquiryMessage } from "../../lib/appointment";
 import { buildWhatsAppUrl } from "../../lib/whatsapp";
 import { useTranslations } from "../../i18n/utils";
 
@@ -18,7 +19,7 @@ const [services, categories] = await Promise.all([
   getCategories(lang),
 ]);
 
-const fallbackUrl = buildWhatsAppUrl(`${t("msg.intro")} ${t("msg.footer")}`);
+const fallbackUrl = buildWhatsAppUrl(buildEnquiryMessage(t));
 ---
 
 <BaseLayout lang={lang} path="/book" title={t("booking.title")}>

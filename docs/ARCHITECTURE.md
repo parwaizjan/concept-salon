@@ -57,7 +57,8 @@ concept-salon/
    │  ├─ gallery/.gitkeep        # clone photos (imported by src/data/gallery.ts)
    │  └─ services/.gitkeep       # service photos (auto-loaded by service-images.ts)
    ├─ components/
-   │  ├─ Header.astro, Footer.astro, LangSwitcher.astro, Seo.astro
+   │  ├─ Header.astro, Footer.astro, LangSwitcher.astro, Seo.astro,
+   │  │  DemoRibbon.astro
    │  ├─ hero/Hero.astro
    │  ├─ services/CategoryNav.astro, ServiceList.astro, ServiceCard.astro,
    │  │            ServiceImage.astro, FeaturedServices.astro
@@ -284,6 +285,22 @@ return `https://wa.me/${n}?text=${encodeURIComponent(message)}`;
 Every CTA routes through it. The appointment message is assembled in
 `src/lib/appointment.ts` (see `docs/APPOINTMENT-FLOW.md`). Never inline `wa.me`
 URLs in components.
+
+### Demo standard (ribbon + source tag)
+
+`src/lib/demo.ts` exports `isDemo` (true while the site is noindex). When
+`isDemo`:
+
+- `DemoRibbon.astro` renders a slim, non-dismissible "Sample website — a demo by
+  Zuvo Web Studio Express" ribbon above the header on every page, with a
+  **Message us** link. That link is a _website_ enquiry to Zuvo (`site.demo.
+enquiryNumber`) and names the demo (`…like the Amara Studio demo…`); it is
+  deliberately **not** tag-prefixed.
+- `tagMessage()` prefixes every visitor-facing request (appointment, estimator
+  breakdown, contact/enquiry) with `site.demo.tag` (`[DEMO: Salon]`).
+
+Both are gated on `indexable`, so a clone that turns on indexing drops the ribbon
+and the tag automatically. Strings live in `site.demo`.
 
 ## SEO & structured data
 

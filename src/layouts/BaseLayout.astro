@@ -7,9 +7,11 @@ import "@fontsource-variable/noto-sans-tamil";
 import { site, type Locale } from "../data/site";
 import { ui } from "../i18n/ui";
 import { useTranslations } from "../i18n/utils";
+import { isDemo } from "../lib/demo";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import StickyBookBar from "../components/book/StickyBookBar.astro";
+import DemoRibbon from "../components/DemoRibbon.astro";
 import Seo from "../components/Seo.astro";
 import "../styles/global.css";
 
@@ -68,6 +70,7 @@ const isDefaultLocale = lang === site.defaultLocale;
   </head>
   <body>
     <a class="skip-link" href="#main">{t("a11y.skip")}</a>
+    {isDemo && <DemoRibbon />}
     <Header lang={lang} />
     <main id="main">
       <slot />

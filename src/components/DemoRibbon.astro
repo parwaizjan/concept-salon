@@ -1,0 +1,26 @@
+---
+import { site } from "../data/site";
+import { buildWhatsAppUrl } from "../lib/whatsapp";
+
+// Always English (demo standard). This is a website enquiry to Zuvo, so it is
+// NOT prefixed with the demo source tag.
+const message = `Hi Zuvo Web Studio Express, I'd like a website like the ${site.name} demo for my shop.`;
+const url = buildWhatsAppUrl(message, site.demo.enquiryNumber);
+---
+
+<div class="border-b border-border bg-surface-alt text-text-muted">
+  <div
+    class="container-page flex flex-wrap items-center justify-center gap-x-2 py-1.5 text-center text-xs sm:text-sm"
+  >
+    <span>{site.demo.ribbonText}</span>
+    <span aria-hidden="true">·</span>
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="font-semibold text-primary underline"
+    >
+      {site.demo.ribbonCta}
+    </a>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 import { site, type Locale } from "../data/site";
 import type { UiKey } from "../i18n/ui";
+import { tagMessage } from "./demo";
 import { formatPrice } from "./format";
 
 export type AppointmentLine = {
@@ -82,5 +83,10 @@ export function buildAppointmentMessage(
   }
 
   parts.push("", t("msg.footer"));
-  return parts.join("\n");
+  return tagMessage(parts.join("\n"));
+}
+
+/** A generic "chat with us" enquiry, tagged like every other demo request. */
+export function buildEnquiryMessage(t: Translate): string {
+  return tagMessage(`${t("msg.intro")} ${t("msg.footer")}`);
 }
