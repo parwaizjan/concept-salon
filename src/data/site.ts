@@ -108,10 +108,10 @@ export const site = {
   //    are distinguishable from website enquiries. Both are dropped automatically
   //    when a clone sets `indexable: true`.
   demo: {
-    ribbonText: "Sample website — a demo by Zuvo Web Studio Express",
+    ribbonText: "Sample website — a demo by Zuvo Web Studio",
     ribbonCta: "Message us",
     tag: "[DEMO: Salon]",
-    enquiryNumber: "94743430033", // Zuvo Web Studio Express
+    enquiryNumber: "94743430033", // Zuvo Web Studio
   },
 
   // SEO — false for the concept demo, true for a real salon clone.

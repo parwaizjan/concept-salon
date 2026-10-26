@@ -24,7 +24,7 @@ cost**, not for one-off bespoke work.
 - Demo site: `https://demo-salon.zuvo.lk`
 - Hosting: Cloudflare Workers, custom domain via `*.zuvo.lk`
 - Source: private GitHub repo (`parwaizjan/concept-salon`)
-- Catalogue: listed on `express.zuvo.lk` (see `docs/EXPRESS-HANDOFF.md`)
+- Catalogue: listed on `zuvo.lk` (see `docs/EXPRESS-HANDOFF.md`)
 - Target market: Sri Lankan salons and beauty studios
 - Languages: **English first**, with first-class Sinhala (`si`) and Tamil (`ta`)
   structure already in place (see §3.4)
@@ -175,8 +175,8 @@ Track unresolved decisions here so agents do not silently pick one:
   chosen. See `docs/CONTENT-AND-SERVICES.md`.
 - **Translations.** Sinhala/Tamil content will be supplied later. Decide whether
   service names come from the Sheet, the content collections, or both.
-- **Screenshot for express.** `public/demos/salon.webp` must be captured for
-  `express.zuvo.lk` once the demo is live. See `docs/EXPRESS-HANDOFF.md`.
+- **Screenshot for zuvo.lk.** `public/demos/salon.webp` must be captured for
+  `zuvo.lk` once the demo is live. See `docs/EXPRESS-HANDOFF.md`.
 - **Native-speaker review** of Sinhala/Tamil strings before pitching, once enabled.
 
 When you resolve one of these, move the decision into `docs/DECISIONS.md` and leave
@@ -195,5 +195,5 @@ a short note here.
 - `docs/CLIENT-CHECKLIST.md` — client-facing intake list and WhatsApp message; keep
   it free of developer jargon and credentials.
 - `docs/DEPLOYMENT.md` — Cloudflare Workers, domain, GitHub, indexing headers.
-- `docs/EXPRESS-HANDOFF.md` — what the express.zuvo.lk repo must change to list this
+- `docs/EXPRESS-HANDOFF.md` — what the zuvo.lk repo must change to list this
   demo.
